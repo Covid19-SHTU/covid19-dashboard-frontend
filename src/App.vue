@@ -27,7 +27,7 @@
     </v-app-bar>
     <v-main>
       <transition name="fade">
-        <router-view class="child-view"></router-view>
+        <router-view class="child-view" :data="data"></router-view>
       </transition>
     </v-main>
   </v-app>
@@ -40,11 +40,15 @@ export default {
   name: 'App',
   data() {
     return {
+      data: null,
+      drawer: true,
       list_items: [
         { title: "Dashboard", icon: mdiViewDashboard, link: "/" }
-      ],
-      drawer: true
+      ]
     }
+  },
+  mounted () {
+    this.axios.get('http://127.0.0.1:9000').then((response) => (this.data = response.data))
   }
 };
 </script>
