@@ -8,10 +8,15 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/composition-api": "^1.2.1",
     "axios": "^0.21.4",
+    "chart.js": "^3.5.1",
+    "chartjs-adapter-moment": "^1.0.0",
     "core-js": "^3.6.5",
+    "moment": "^2.29.1",
     "vue": "^2.6.11",
     "vue-axios": "^3.3.7",
+    "vue-chart-3": "^0.5.8",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0"
   },

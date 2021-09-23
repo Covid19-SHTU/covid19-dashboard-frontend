@@ -58,12 +58,37 @@
       </v-col>
       <v-col cols="12" md="8">
         <v-card>
+          <v-card-text>
+            <v-tabs v-model="tab" centered>
+              <v-tabs-slider></v-tabs-slider>
+              <v-tab href="#tab-1">Cases</v-tab>
+              <v-tab href="#tab-2">Cumulative Cases</v-tab>
+              <v-tab href="#tab-3">Deaths</v-tab>
+              <v-tab href="#tab-4">Cumulative Deaths</v-tab>
+            </v-tabs>
+            <v-tabs-items v-model="tab">
+              <v-tab-item value="tab-1">
+                <bar-chart :chartData="worldDeathData('cases', 'daily')" :options="options" />
+              </v-tab-item>
+              <v-tab-item value="tab-2">
+                <bar-chart :chartData="worldDeathData('cases', 'cumulative')" :options="options" />
+              </v-tab-item>
+              <v-tab-item value="tab-3">
+                <bar-chart :chartData="worldDeathData('deaths', 'daily')" :options="options" />
+              </v-tab-item>
+              <v-tab-item value="tab-4">
+                <bar-chart :chartData="worldDeathData('deaths', 'cumulative')" :options="options" />
+              </v-tab-item>
+            </v-tabs-items>
+          </v-card-text>
+        </v-card>
+        <v-card class="mt-4">
           <v-card-title>
             Summary Data
             <v-spacer></v-spacer>
             <v-text-field v-model="search" append-icon="mdi-magnify" label="Search by Country" single-line hide-details></v-text-field>
           </v-card-title>
-          <v-data-table :headers="table_headers" :items="getTableItems()" :search="search"></v-data-table>
+          <v-data-table :headers="table_headers" :items="tableItems()" :search="search"></v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -71,10 +96,19 @@
 </template>
 
 <script>
+import { BarChart } from "vue-chart-3";
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-moment';
+Chart.register();
+
 export default {
+  components: {
+    BarChart
+  },
   data() {
     return {
       search: "",
+      tab: null,
       table_headers: [
         { text: "Country", value: "country" },
         { text: "ISO", value: "ISO" },
@@ -86,10 +120,44 @@ export default {
         { text: "Vaccinated At Least One Dose", value: "plus_vaccinated" },
         { text: "Fully Vaccinated", value: "fully_vaccinated" },
       ],
-    };
+      options: {
+        responsive: true,
+        scales: {
+          xAxes: [
+            {
+              type: "time",
+              time: {
+                tooltipFormat: 'LL'
+              },
+            },
+          ]
+        },
+      },
+    }
   },
   methods: {
-    getTableItems: function() {
+    worldDeathData: function(type, way) {
+      const color = {
+        cases: {daily: "#3F51B5", cumulative: "#5E35B1"},
+        deaths: {daily: "#FF7043", cumulative: "#E53935"},
+      }
+      var arr = {
+        datasets: [{
+          label: type.slice(0, 1).toUpperCase() + type.slice(1),
+          backgroundColor: color[type][way],
+          data: [],
+        }],
+      };
+      for (var key in this.$attrs.data.world.history[way]) {
+        var data = this.$attrs.data.world.history[way][key];
+        arr.datasets[0].data.push({
+          x: this.getTimeFromTimestamp(data.time),
+          y: data[type]
+        })
+      }
+      return arr;
+    },
+    tableItems: function() {
       var arr = [];
       for (var key in this.$attrs.data.country) {
         var data = this.$attrs.data.country[key];

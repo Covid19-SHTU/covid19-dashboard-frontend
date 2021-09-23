@@ -1418,10 +1418,46 @@
   optionalDependencies:
     prettier "^1.18.2"
 
+"@vue/composition-api@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.nlark.com/@vue/composition-api/download/@vue/composition-api-1.2.1.tgz#88ffd9eb7c9ca8989d4ee65f55f2fd2303b20d6c"
+  integrity sha1-iP/Z63ycqJidTuZfVfL9IwOyDWw=
+  dependencies:
+    tslib "^2.3.0"
+
 "@vue/preload-webpack-plugin@^1.1.0":
   version "1.1.2"
   resolved "https://registry.npm.taobao.org/@vue/preload-webpack-plugin/download/@vue/preload-webpack-plugin-1.1.2.tgz#ceb924b4ecb3b9c43871c7a429a02f8423e621ab"
   integrity sha1-zrkktOyzucQ4ccekKaAvhCPmIas=
+
+"@vue/reactivity@3.2.14":
+  version "3.2.14"
+  resolved "https://registry.npmmirror.com/@vue/reactivity/download/@vue/reactivity-3.2.14.tgz#5cb15209ee9313cb50ed9b20fdd108ea2a904f77"
+  integrity sha1-XLFSCe6TE8tQ7Zsg/dEI6iqQT3c=
+  dependencies:
+    "@vue/shared" "3.2.14"
+
+"@vue/runtime-core@3.2.14", "@vue/runtime-core@latest":
+  version "3.2.14"
+  resolved "https://registry.npmmirror.com/@vue/runtime-core/download/@vue/runtime-core-3.2.14.tgz#8db9d6ad6682cd5aab0cc4656a8a9c53ef2e2c7a"
+  integrity sha1-jbnWrWaCzVqrDMRlaoqcU+8uLHo=
+  dependencies:
+    "@vue/reactivity" "3.2.14"
+    "@vue/shared" "3.2.14"
+
+"@vue/runtime-dom@latest":
+  version "3.2.14"
+  resolved "https://registry.npmmirror.com/@vue/runtime-dom/download/@vue/runtime-dom-3.2.14.tgz#ca0d962fcb9dec37c8904533a3246fdc50ecae66"
+  integrity sha1-yg2WL8ud7DfIkEUzoyRv3FDsrmY=
+  dependencies:
+    "@vue/runtime-core" "3.2.14"
+    "@vue/shared" "3.2.14"
+    csstype "^2.6.8"
+
+"@vue/shared@3.2.14":
+  version "3.2.14"
+  resolved "https://registry.npmmirror.com/@vue/shared/download/@vue/shared-3.2.14.tgz#9b882098a004b995124b7577b357135a66d922ef"
+  integrity sha1-m4ggmKAEuZUSS3V3s1cTWmbZIu8=
 
 "@vue/web-component-wrapper@^1.2.0":
   version "1.3.0"
@@ -2381,6 +2417,16 @@ chardet@^0.7.0:
   resolved "https://registry.nlark.com/chardet/download/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha1-kAlISfCTfy7twkJdDSip5fDLrZ4=
 
+chart.js@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.nlark.com/chart.js/download/chart.js-3.5.1.tgz#73e24d23a4134a70ccdb5e79a917f156b6f3644a"
+  integrity sha1-c+JNI6QTSnDM2155qRfxVrbzZEo=
+
+chartjs-adapter-moment@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/chartjs-adapter-moment/download/chartjs-adapter-moment-1.0.0.tgz#9174b1093c68bcfe285aff24f7388ad60d44e8f7"
+  integrity sha1-kXSxCTxovP4oWv8k9ziK1g1E6Pc=
+
 check-types@^8.0.3:
   version "8.0.3"
   resolved "https://registry.nlark.com/check-types/download/check-types-8.0.3.tgz#3356cca19c889544f2d7a95ed49ce508a0ecf552"
@@ -3046,6 +3092,16 @@ csso@^4.0.2:
   integrity sha1-6jpWE0bo3J9UbW/r7dUBh884lSk=
   dependencies:
     css-tree "^1.1.2"
+
+csstype@^2.6.8:
+  version "2.6.18"
+  resolved "https://registry.nlark.com/csstype/download/csstype-2.6.18.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcsstype%2Fdownload%2Fcsstype-2.6.18.tgz#980a8b53085f34af313410af064f2bd241784218"
+  integrity sha1-mAqLUwhfNK8xNBCvBk8r0kF4Qhg=
+
+csstype@latest:
+  version "3.0.9"
+  resolved "https://registry.nlark.com/csstype/download/csstype-3.0.9.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcsstype%2Fdownload%2Fcsstype-3.0.9.tgz#6410af31b26bd0520933d02cbc64fce9ce3fbf0b"
+  integrity sha1-ZBCvMbJr0FIJM9AsvGT86c4/vws=
 
 cyclist@^1.0.1:
   version "1.0.1"
@@ -5353,7 +5409,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.nlark.com/lodash.uniq/download/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.3:
+lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.3, lodash@latest:
   version "4.17.21"
   resolved "https://registry.npm.taobao.org/lodash/download/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha1-Z5WRxWTDv/quhFTPCz3zcMPWkRw=
@@ -5662,6 +5718,11 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   resolved "https://registry.nlark.com/mkdirp/download/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha1-PrXtYmInVteaXw4qIh3+utdcL34=
 
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.nlark.com/moment/download/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha1-sr52n6MZQL6e7qZGnAdeNQBvo9M=
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.nlark.com/move-concurrently/download/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -5725,6 +5786,11 @@ nan@^2.12.1:
   version "2.15.0"
   resolved "https://registry.nlark.com/nan/download/nan-2.15.0.tgz#3f34a473ff18e15c1b5626b62903b5ad6e665fee"
   integrity sha1-PzSkc/8Y4VwbVia2KQO1rW5mX+4=
+
+nanoid@latest:
+  version "3.1.25"
+  resolved "https://registry.nlark.com/nanoid/download/nanoid-3.1.25.tgz?cache=0&sync_timestamp=1628771905854&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fnanoid%2Fdownload%2Fnanoid-3.1.25.tgz#09ca32747c0e543f0e1814b7d3793477f9c8e152"
+  integrity sha1-CcoydHwOVD8OGBS303k0d/nI4VI=
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -8089,6 +8155,11 @@ tslib@^1.9.0:
   resolved "https://registry.nlark.com/tslib/download/tslib-1.14.1.tgz?cache=0&sync_timestamp=1628722580350&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftslib%2Fdownload%2Ftslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha1-zy04vcNKE0vK8QkcQfZhni9nLQA=
 
+tslib@^2.3.0:
+  version "2.3.1"
+  resolved "https://registry.nlark.com/tslib/download/tslib-2.3.1.tgz?cache=0&sync_timestamp=1628722580350&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftslib%2Fdownload%2Ftslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
+  integrity sha1-6KM1rdXOrlGqJh0ypJAVjvBC7wE=
+
 tty-browserify@0.0.0:
   version "0.0.0"
   resolved "https://registry.nlark.com/tty-browserify/download/tty-browserify-0.0.0.tgz#a157ba402da24e9bf957f9aa69d524eed42901a6"
@@ -8385,6 +8456,18 @@ vue-axios@^3.3.7:
   resolved "https://registry.nlark.com/vue-axios/download/vue-axios-3.3.7.tgz?cache=0&sync_timestamp=1631865685355&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fvue-axios%2Fdownload%2Fvue-axios-3.3.7.tgz#1958b6fb712eb4011ab21db433b2350e2a6d684f"
   integrity sha1-GVi2+3EutAEash20M7I1DiptaE8=
 
+vue-chart-3@^0.5.8:
+  version "0.5.8"
+  resolved "https://registry.npmmirror.com/vue-chart-3/download/vue-chart-3-0.5.8.tgz#1b3b6d1160f0696f8757d614eb94a720fb321a9d"
+  integrity sha1-GzttEWDwaW+HV9YU65SnIPsyGp0=
+  dependencies:
+    "@vue/runtime-core" latest
+    "@vue/runtime-dom" latest
+    csstype latest
+    lodash latest
+    nanoid latest
+    vue-demi "^0.10.1"
+
 vue-cli-plugin-vuetify@~2.4.2:
   version "2.4.2"
   resolved "https://registry.nlark.com/vue-cli-plugin-vuetify/download/vue-cli-plugin-vuetify-2.4.2.tgz#f5c54a853cd5b06633da4a508ff4aa5b6b6275e0"
@@ -8393,6 +8476,11 @@ vue-cli-plugin-vuetify@~2.4.2:
     null-loader "^3.0.0"
     semver "^7.1.2"
     shelljs "^0.8.3"
+
+vue-demi@^0.10.1:
+  version "0.10.1"
+  resolved "https://registry.nlark.com/vue-demi/download/vue-demi-0.10.1.tgz#229b81395510f02f4ee255344557a12cc0120930"
+  integrity sha1-IpuBOVUQ8C9O4lU0RVehLMASCTA=
 
 vue-eslint-parser@^7.0.0:
   version "7.11.0"

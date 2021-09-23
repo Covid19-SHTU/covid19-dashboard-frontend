@@ -14,7 +14,7 @@
       <v-list nav dense>
         <v-list-item v-for="item in list_items" :key="item.title" :to="item.link">
           <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>mdi-view-dashboard</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import { mdiViewDashboard } from "@mdi/js";
 
 export default {
   name: 'App',
@@ -43,12 +42,12 @@ export default {
       data: null,
       drawer: true,
       list_items: [
-        { title: "Dashboard", icon: mdiViewDashboard, link: "/" }
+        { title: "Dashboard", link: "/" }
       ]
     }
   },
   mounted () {
-    this.axios.get('http://127.0.0.1:9000').then((response) => (this.data = response.data))
+    this.axios.get('http://192.168.0.9:9000').then((response) => (this.data = response.data))
   }
 };
 </script>
