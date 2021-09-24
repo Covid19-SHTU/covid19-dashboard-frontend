@@ -2427,6 +2427,13 @@ chartjs-adapter-moment@^1.0.0:
   resolved "https://registry.npmmirror.com/chartjs-adapter-moment/download/chartjs-adapter-moment-1.0.0.tgz#9174b1093c68bcfe285aff24f7388ad60d44e8f7"
   integrity sha1-kXSxCTxovP4oWv8k9ziK1g1E6Pc=
 
+chartjs-plugin-zoom@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.nlark.com/chartjs-plugin-zoom/download/chartjs-plugin-zoom-1.1.1.tgz#8a28923a17fcb5eb57a0dc94c5113bf402677647"
+  integrity sha1-iiiSOhf8tetXoNyUxRE79AJndkc=
+  dependencies:
+    hammerjs "^2.0.8"
+
 check-types@^8.0.3:
   version "8.0.3"
   resolved "https://registry.nlark.com/check-types/download/check-types-8.0.3.tgz#3356cca19c889544f2d7a95ed49ce508a0ecf552"
@@ -4314,6 +4321,11 @@ gzip-size@^5.0.0:
   dependencies:
     duplexer "^0.1.1"
     pify "^4.0.1"
+
+hammerjs@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.npm.taobao.org/hammerjs/download/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
+  integrity sha1-BO93hiz/K7edMPdpIJWTAiK/YPE=
 
 handle-thing@^2.0.0:
   version "2.0.1"

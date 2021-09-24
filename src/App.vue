@@ -1,7 +1,5 @@
 <style>
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
+.fade-enter, .fade-leave-to {opacity: 0}
 .child-view {
   position: absolute;
   transition: all .5s cubic-bezier(.5, 0, .1, 1);
@@ -14,7 +12,7 @@
       <v-list nav dense>
         <v-list-item v-for="item in list_items" :key="item.title" :to="item.link">
           <v-list-item-icon>
-            <v-icon>mdi-view-dashboard</v-icon>
+            <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -24,30 +22,83 @@
     </v-navigation-drawer>
     <v-app-bar app clipped-left>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-spacer></v-spacer>
+      <v-btn icon @click="initSettings" @click.stop="settings.dialog = true">
+        <v-icon>{{ settings.icon }}</v-icon>
+      </v-btn>
+      <v-dialog v-model="settings.dialog" max-width="600px">
+        <v-card>
+          <v-card-title>设置</v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-form>
+                <v-select v-model="settings.theme.value" :items="settings.theme.items" label="主题"></v-select>
+              </v-form>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text @click="settings.dialog = false">取消</v-btn>
+            <v-btn color="primary" text @click="saveSettings">保存</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-app-bar>
     <v-main>
       <transition name="fade">
         <router-view class="child-view" :data="data"></router-view>
       </transition>
     </v-main>
+    <v-overlay opacity="1" :value="!this.data">
+      <v-progress-circular indeterminate color="primary" width="6" size="64"></v-progress-circular>
+    </v-overlay>
   </v-app>
 </template>
 
 <script>
+import { mdiViewDashboard, mdiCog } from "@mdi/js";
 
 export default {
   name: 'App',
+  created() {
+    try {
+      this.$vuetify.theme.dark = this.settings.theme.value;
+      document.body.removeChild(document.getElementById("app-loader"));
+    } catch {
+      console.log("Have a nice day!");
+    }
+  },
   data() {
     return {
       data: null,
-      drawer: true,
+      drawer: null,
       list_items: [
-        { title: "Dashboard", link: "/" }
-      ]
+        { title: "Dashboard", icon: mdiViewDashboard, link: "/" }
+      ],
+      settings: {
+        icon: mdiCog,
+        dialog: false,
+        theme: {
+          value: window.matchMedia('(prefers-color-scheme: dark)').matches,
+          items: [
+            { text: "亮色", value: false },
+            { text: "暗色", value: true }
+          ]
+        }
+      }
+    }
+  },
+  methods: {
+    initSettings: function() {
+      this.settings.theme.value = this.$vuetify.theme.dark;
+    },
+    saveSettings: function() {
+      this.$vuetify.theme.dark = this.settings.theme.value;
+      this.settings.dialog = false;
     }
   },
   mounted () {
-    this.axios.get('http://192.168.0.9:9000').then((response) => (this.data = response.data))
+    this.axios.get('http://192.168.0.9:5000').then((response) => (this.data = response.data))
   }
 };
 </script>

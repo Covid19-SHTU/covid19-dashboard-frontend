@@ -59,14 +59,14 @@
       <v-col cols="12" md="8">
         <v-card>
           <v-card-text>
-            <v-tabs v-model="tab" centered>
+            <v-tabs v-model="tab" centered show-arrows>
               <v-tabs-slider></v-tabs-slider>
               <v-tab href="#tab-1">Cases</v-tab>
               <v-tab href="#tab-2">Cumulative Cases</v-tab>
               <v-tab href="#tab-3">Deaths</v-tab>
               <v-tab href="#tab-4">Cumulative Deaths</v-tab>
             </v-tabs>
-            <v-tabs-items v-model="tab">
+            <v-tabs-items v-model="tab" touchless>
               <v-tab-item value="tab-1">
                 <bar-chart :chartData="worldDeathData('cases', 'daily')" :options="options" />
               </v-tab-item>
@@ -98,8 +98,9 @@
 <script>
 import { BarChart } from "vue-chart-3";
 import Chart from 'chart.js/auto';
+import zoomPlugin from 'chartjs-plugin-zoom';
 import 'chartjs-adapter-moment';
-Chart.register();
+Chart.register(zoomPlugin);
 
 export default {
   components: {
@@ -132,7 +133,30 @@ export default {
             },
           ]
         },
-      },
+        plugins: {
+          legend: false,
+          decimation: {
+            enabled: true,
+            algorithm: 'min-max'
+          },
+          zoom: {
+            pan: {
+              enabled: true,
+              mode: 'x'
+            },
+            zoom: {
+              wheel: {
+                enabled: true,
+                speed: 0.2
+              },
+              pinch: {
+                enabled: true
+              },
+              mode: 'x'
+            }
+          }
+        }
+      }
     }
   },
   methods: {

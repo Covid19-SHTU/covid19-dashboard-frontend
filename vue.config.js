@@ -6,9 +6,6 @@ module.exports = {
   chainWebpack: config => {
     config.plugins.delete('prefetch')
   },
-  css: {
-    extract: false
-  },
   devServer: {
     hot: true,
     port: 8000,
