@@ -1,11 +1,3 @@
-<style>
-.fade-enter, .fade-leave-to {opacity: 0}
-.child-view {
-  position: absolute;
-  transition: all .5s cubic-bezier(.5, 0, .1, 1);
-}
-</style>
-
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" app clipped>
@@ -45,9 +37,7 @@
       </v-dialog>
     </v-app-bar>
     <v-main>
-      <transition name="fade">
-        <router-view class="child-view" :data="data"></router-view>
-      </transition>
+      <router-view class="child-view" :data="data"></router-view>
     </v-main>
     <v-overlay opacity="1" :value="!this.data">
       <v-progress-circular indeterminate color="primary" width="6" size="64"></v-progress-circular>

@@ -88,7 +88,7 @@
             <v-spacer></v-spacer>
             <v-text-field v-model="search" append-icon="mdi-magnify" label="Search by Country" single-line hide-details></v-text-field>
           </v-card-title>
-          <v-data-table :headers="table_headers" :items="tableItems()" :search="search"></v-data-table>
+          <v-data-table :headers="table_headers" :items="tableItems()" :search="search" sort-by="cumulative_cases" sort-desc :footer-props="{itemsPerPageOptions: [5, 10, 15]}"></v-data-table>
         </v-card>
       </v-col>
     </v-row>
