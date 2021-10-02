@@ -37,10 +37,21 @@
       </v-dialog>
     </v-app-bar>
     <v-main>
-      <router-view class="child-view" :data="data"></router-view>
+      <router-view :data="data" v-if="alive"></router-view>
     </v-main>
     <v-overlay opacity="1" :value="!this.data">
-      <v-progress-circular indeterminate color="primary" width="6" size="64"></v-progress-circular>
+      <v-progress-circular v-if="loading" indeterminate color="primary" width="6" size="64"></v-progress-circular>
+      <v-card v-if="!loading">
+          <v-card-title>Network Error</v-card-title>
+          <v-card-text>
+            <p class="font-weight-bold">Unable to connect to the backend server.</p>
+            <p>Check your Internet connection and try refreshing the page.</p>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="refresh">Refresh</v-btn>
+          </v-card-actions>
+        </v-card>
     </v-overlay>
   </v-app>
 </template>
@@ -58,10 +69,15 @@ export default {
       console.log("Have a nice day!");
     }
   },
+  mounted () {
+    this.axios.get('http://127.0.0.1:9000').then((response) => (this.data = response.data)).catch(() => (this.loading = false))
+  },
   data() {
     return {
       data: null,
       drawer: null,
+      loading: true,
+      alive: true,
       list_items: [
         { title: "Dashboard", icon: mdiViewDashboard, link: "/" }
       ],
@@ -79,16 +95,16 @@ export default {
     }
   },
   methods: {
-    initSettings: function() {
+    initSettings () {
       this.settings.theme.value = this.$vuetify.theme.dark;
     },
-    saveSettings: function() {
+    saveSettings () {
       this.$vuetify.theme.dark = this.settings.theme.value;
       this.settings.dialog = false;
+    },
+    refresh () {
+      location.reload();
     }
-  },
-  mounted () {
-    this.axios.get('http://192.168.0.9:5000').then((response) => (this.data = response.data))
   }
 };
 </script>
