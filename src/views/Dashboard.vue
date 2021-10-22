@@ -1,6 +1,33 @@
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>
+
 <template>
-  <v-container v-if="this.$attrs.data">
-    <v-row>
+  <v-container>
+    <transition name="fade" mode="out-in">
+    <v-row v-if="!data" key="skeleton">
+      <v-col cols="12">
+        <v-skeleton-loader type="image"></v-skeleton-loader>
+      </v-col>
+      <v-col cols="12" md="4">
+        <v-skeleton-loader type="date-picker"></v-skeleton-loader>
+      </v-col>
+      <v-col cols="12" md="8">
+        <v-skeleton-loader type="card"></v-skeleton-loader>
+        <v-skeleton-loader type="table" class="mt-4"></v-skeleton-loader>
+      </v-col>
+    </v-row>
+    <v-row v-else key="view">
+      <v-col cols="12">
+        <v-card min-height="500">
+          <h1>The map of the world :)</h1>
+        </v-card>
+      </v-col>
       <v-col cols="12" md="4">
         <v-card>
           <v-card-title>Global Statistics</v-card-title>
@@ -8,48 +35,48 @@
             <v-row>
               <v-col cols="12" md="6">
                 <p class="text-button">New Cases</p>
-                <p class="text-h4">{{ this.$attrs.data.world.cases }}</p>
+                <p class="text-h4">{{ data.world.cases }}</p>
               </v-col>
               <v-col cols="12" md="6">
                 <p class="text-button">Confirmed Cases</p>
                 <p class="text-h4">
-                  {{ this.$attrs.data.world.cumulative_cases }}
+                  {{ data.world.cumulative_cases }}
                 </p>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="6">
                 <p class="text-button">New Deaths</p>
-                <p class="text-h4">{{ this.$attrs.data.world.deaths }}</p>
+                <p class="text-h4">{{ data.world.deaths }}</p>
               </v-col>
               <v-col cols="12" md="6">
                 <p class="text-button">Confirmed Deaths</p>
                 <p class="text-h4">
-                  {{ this.$attrs.data.world.cumulative_deaths }}
+                  {{ data.world.cumulative_deaths }}
                 </p>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="6">
                 <p class="text-button">Vaccine Doses Administered</p>
-                <p class="text-h4">{{ this.$attrs.data.world.total_vaccinated }}</p>
+                <p class="text-h4">{{ data.world.total_vaccinated }}</p>
               </v-col>
               <v-col cols="12" md="6">
                 <p class="text-button">Vaccinated At Least One Dose</p>
                 <p class="text-h4">
-                  {{ this.$attrs.data.world.plus_vaccinated }}
+                  {{ data.world.plus_vaccinated }}
                 </p>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" md="6">
                 <p class="text-button">Fully Vaccinated</p>
-                <p class="text-h4">{{ this.$attrs.data.world.fully_vaccinated }}</p>
+                <p class="text-h4">{{ data.world.fully_vaccinated }}</p>
               </v-col>
               <v-col cols="12" md="6">
                 <p class="text-button">Last Update</p>
                 <p class="text-h4">
-                  {{ getTimeFromTimestamp(this.$attrs.data.world.update) }}
+                  {{ getTimeFromTimestamp(data.world.update) }}
                 </p>
               </v-col>
             </v-row>
@@ -92,6 +119,20 @@
         </v-card>
       </v-col>
     </v-row>
+    </transition>
+    <v-overlay opacity="1" :value="!loading">
+      <v-card>
+          <v-card-title>Network Error</v-card-title>
+          <v-card-text>
+            <p class="font-weight-bold">Unable to connect to the backend server.</p>
+            <p>Check your Internet connection and try refreshing the page.</p>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="refresh">Refresh</v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -108,6 +149,8 @@ export default {
   },
   data() {
     return {
+      data: null,
+      loading: true,
       search: "",
       tab: null,
       table_headers: [
@@ -159,6 +202,9 @@ export default {
       }
     }
   },
+  mounted () {
+    this.axios.get('http://127.0.0.1:5000').then((response) => (this.data = response.data)).catch(() => (this.loading = false))
+  },
   methods: {
     worldDeathData: function(type, way) {
       const color = {
@@ -172,8 +218,8 @@ export default {
           data: [],
         }],
       };
-      for (var key in this.$attrs.data.world.history[way]) {
-        var data = this.$attrs.data.world.history[way][key];
+      for (var key in this.data.world.history[way]) {
+        var data = this.data.world.history[way][key];
         arr.datasets[0].data.push({
           x: this.getTimeFromTimestamp(data.time),
           y: data[type]
@@ -183,8 +229,8 @@ export default {
     },
     tableItems: function() {
       var arr = [];
-      for (var key in this.$attrs.data.country) {
-        var data = this.$attrs.data.country[key];
+      for (var key in this.data.country) {
+        var data = this.data.country[key];
         if (data.plus_vaccinated == null) data.plus_vaccinated = "N/A";
         if (data.fully_vaccinated == null) data.fully_vaccinated = "N/A";
         arr.push(data);
@@ -195,6 +241,9 @@ export default {
       var date = new Date();
       date.setTime(time * 1000);
       return date.toLocaleDateString()
+    },
+    refresh () {
+      location.reload();
     }
   },
 };
