@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mdiViewDashboard, mdiCog } from "@mdi/js";
+import { mdiEarth, mdiChartAreaspline, mdiCog } from "@mdi/js";
 
 export default {
   name: 'App',
@@ -60,7 +60,8 @@ export default {
       drawer: null,
       loading: true,
       list_items: [
-        { title: "Dashboard", icon: mdiViewDashboard, link: "/" }
+        { title: "Dashboard", icon: mdiEarth, link: "/" },
+        { title: "Country", icon: mdiChartAreaspline, link: "/country/US" }
       ],
       settings: {
         icon: mdiCog,

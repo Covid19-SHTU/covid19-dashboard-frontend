@@ -24,66 +24,6 @@
     </v-row>
     <v-row v-else key="view">
       <v-col cols="12">
-        <v-card min-height="500">
-          <h1>The map of the world :)</h1>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-card>
-          <v-card-title>Global Statistics</v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col cols="12" md="6">
-                <p class="text-button">New Cases</p>
-                <p class="text-h4">{{ data.world.cases }}</p>
-              </v-col>
-              <v-col cols="12" md="6">
-                <p class="text-button">Confirmed Cases</p>
-                <p class="text-h4">
-                  {{ data.world.cumulative_cases }}
-                </p>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="6">
-                <p class="text-button">New Deaths</p>
-                <p class="text-h4">{{ data.world.deaths }}</p>
-              </v-col>
-              <v-col cols="12" md="6">
-                <p class="text-button">Confirmed Deaths</p>
-                <p class="text-h4">
-                  {{ data.world.cumulative_deaths }}
-                </p>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="6">
-                <p class="text-button">Vaccine Doses Administered</p>
-                <p class="text-h4">{{ data.world.total_vaccinated }}</p>
-              </v-col>
-              <v-col cols="12" md="6">
-                <p class="text-button">Vaccinated At Least One Dose</p>
-                <p class="text-h4">
-                  {{ data.world.plus_vaccinated }}
-                </p>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="6">
-                <p class="text-button">Fully Vaccinated</p>
-                <p class="text-h4">{{ data.world.fully_vaccinated }}</p>
-              </v-col>
-              <v-col cols="12" md="6">
-                <p class="text-button">Last Update</p>
-                <p class="text-h4">
-                  {{ getTimeFromTimestamp(data.world.update) }}
-                </p>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="8">
         <v-card>
           <v-card-text>
             <v-tabs v-model="tab" centered show-arrows>
@@ -95,27 +35,19 @@
             </v-tabs>
             <v-tabs-items v-model="tab" touchless>
               <v-tab-item value="tab-1">
-                <bar-chart :chartData="getWorldData('cases')" :options="options" />
+                <bar-chart :chartData="getCountryData('cases')" :options="options" />
               </v-tab-item>
               <v-tab-item value="tab-2">
-                <bar-chart :chartData="getWorldData('cumulative_cases')" :options="options" />
+                <bar-chart :chartData="getCountryData('cumulative_cases')" :options="options" />
               </v-tab-item>
               <v-tab-item value="tab-3">
-                <bar-chart :chartData="getWorldData('deaths')" :options="options" />
+                <bar-chart :chartData="getCountryData('deaths')" :options="options" />
               </v-tab-item>
               <v-tab-item value="tab-4">
-                <bar-chart :chartData="getWorldData('cumulative_deaths')" :options="options" />
+                <bar-chart :chartData="getCountryData('cumulative_deaths')" :options="options" />
               </v-tab-item>
             </v-tabs-items>
           </v-card-text>
-        </v-card>
-        <v-card class="mt-4">
-          <v-card-title>
-            Summary Data
-            <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Search by Country" single-line hide-details></v-text-field>
-          </v-card-title>
-          <v-data-table :headers="table_headers" :items="tableItems()" :search="search" sort-by="cumulative_cases" multi-sort sort-desc :items-per-page="5" :footer-props="{itemsPerPageOptions: [5, 10, 15]}"></v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -204,10 +136,10 @@ export default {
     }
   },
   mounted () {
-    this.axios.get(config.server_url).then((response) => (this.data = response.data)).catch(() => (this.loading = false))
+    this.axios.get(config.server_url + '/country/' + this.$route.params.id).then((response) => (this.data = response.data)).catch(() => (this.loading = false))
   },
   methods: {
-    getWorldData: function(type) {
+    getCountryData: function(type) {
       const color = {
         cases: "#3F51B5",
         cumulative_cases: "#5E35B1",
@@ -221,8 +153,8 @@ export default {
           data: [],
         }],
       };
-      for (var key in this.data.world.history) {
-        var data = this.data.world.history[key]
+      for (var key in this.data.history) {
+        var data = this.data.history[key]
         arr.datasets[0].data.push({
           x: this.getTimeFromTimestamp(data.time),
           y: data[type]
@@ -241,8 +173,8 @@ export default {
       return arr;
     },
     getTimeFromTimestamp: function(time) {
-      var date = new Date();
-      date.setTime(time * 1000);
+      var date = new Date()
+      date.setTime(time * 1000)
       return date.toLocaleDateString()
     },
     refresh () {

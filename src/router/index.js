@@ -10,6 +10,11 @@ export default new VueRouter({
       path: '/',
       name: 'dashboard',
       component: () => import('../views/Dashboard.vue')
+    },
+    {
+      path: '/country/:id',
+      name: 'country',
+      component: () => import('../views/Country.vue')
     }
   ]
 })
