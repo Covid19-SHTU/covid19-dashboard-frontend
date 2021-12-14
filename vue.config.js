@@ -28,7 +28,7 @@ module.exports = {
     ],
     externals: {
       'config': JSON.stringify({
-        server_url: "http://192.168.0.1:6500"
+        server_url: "http://10.19.75.251:6500"
       })
     }
   }
