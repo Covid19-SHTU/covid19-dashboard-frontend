@@ -4177,6 +4177,11 @@ gensync@^1.0.0-beta.2:
   resolved "https://registry.npm.taobao.org/gensync/download/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha1-MqbudsPX9S1GsrGuXZP+qFgKJeA=
 
+geos-major@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npmmirror.com/geos-major/download/geos-major-1.2.1.tgz#c5235a2fdeb9a8fab95999243f8cbf682dcfe30f"
+  integrity sha1-xSNaL965qPq5WZkkP4y/aC3P4w8=
+
 get-caller-file@^2.0.1, get-caller-file@^2.0.5:
   version "2.0.5"
   resolved "https://registry.npm.taobao.org/get-caller-file/download/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"

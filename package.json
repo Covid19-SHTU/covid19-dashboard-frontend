@@ -15,6 +15,7 @@
     "chartjs-adapter-moment": "^1.0.0",
     "chartjs-plugin-zoom": "^1.1.1",
     "core-js": "^3.6.5",
+    "geos-major": "^1.2.1",
     "moment": "^2.29.1",
     "vue": "^2.6.11",
     "vue-axios": "^3.3.7",

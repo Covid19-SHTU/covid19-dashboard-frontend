@@ -13,7 +13,7 @@
         <bar-chart :chartData="getData('cumulative_cases')" :options="options" />
       </v-tab-item>
       <v-tab-item value="tab-3">
-        <bar-chart :chartData="getData('deatns')" :options="options" />
+        <bar-chart :chartData="getData('deaths')" :options="options" />
       </v-tab-item>
       <v-tab-item value="tab-4">
         <bar-chart :chartData="getData('cumulative_deaths')" :options="options" />
@@ -74,23 +74,15 @@ export default {
       },
     };
   },
-  props: ["data"],
+  props: ["data", "graph_types"],
   methods: {
     getData: function (type) {
-      const color = {
-        cases: "#3F51B5",
-        cumulative_cases: "#5E35B1",
-        deaths: "#FF7043",
-        cumulative_deaths: "#E53935",
-      };
+      console.log(type)
       let arr = {
         datasets: [
           {
-            label: type.replace(
-              /\b\w+\b/g,
-              (word) => word.substring(0, 1).toUpperCase() + word.substring(1)
-            ),
-            backgroundColor: color[type],
+            label: this.graph_types[type].title,
+            backgroundColor: this.graph_types[type].color,
             data: [],
           },
         ],

@@ -25,7 +25,7 @@
       <v-row v-else key="view">
         <v-col cols="12">
           <v-card height="500">
-            <Map />
+            <Map :data="data.country" :graph_types="graph_types" />
           </v-card>
         </v-col>
         <v-col cols="12" md="4">
@@ -78,7 +78,7 @@
         <v-col cols="12" md="8">
           <v-card>
             <v-card-text>
-              <Chart :data="data.world.history" />
+              <Chart :data="data.world.history" :graph_types="graph_types" />
             </v-card-text>
           </v-card>
           <v-card class="mt-4">
@@ -138,7 +138,25 @@ export default {
         { text: "Vaccine Doses Administered", value: "total_vaccinated" },
         { text: "Vaccinated At Least One Dose", value: "plus_vaccinated" },
         { text: "Fully Vaccinated", value: "fully_vaccinated" }
-      ]
+      ],
+      graph_types: {
+        cases: {
+          title: "Cases",
+          color: "#3F51B5"
+        },
+        cumulative_cases: {
+          title: "Cumulative Cases",
+          color: "#5E35B1"
+        },
+        deaths: {
+          title: "Deaths",
+          color: "#FF7043"
+        },
+        cumulative_deaths: {
+          title: "Cumulative Deaths",
+          color: "#E53935"
+        }
+      }
     };
   },
   mounted() {
