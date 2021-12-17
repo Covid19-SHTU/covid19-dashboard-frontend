@@ -1,3 +1,12 @@
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+</style>
+
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" app clipped>
@@ -37,7 +46,7 @@
       </v-dialog>
     </v-app-bar>
     <v-main>
-      <router-view></router-view>
+      <router-view />
     </v-main>
   </v-app>
 </template>

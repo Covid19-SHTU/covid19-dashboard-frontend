@@ -1,6 +1,6 @@
 <template>
   <amap :zoom="2" ref="map" :map-style="style" :center="[10, 20]">
-    <div v-for="(type, key) in graph_types" :key="key">
+    <div v-for="(type, key) in graph_data" :key="key">
       <div v-if="key == map_content">
         <amap-circle-marker
           v-for="(country, dekey) in getCountrys(key)"
@@ -9,7 +9,7 @@
           :radius="country.radius"
           :fillOpacity="0.2"
           :strokeWeight="0"
-          :fillColor="graph_types[key].color"
+          :fillColor="graph_data[key].color"
         />
       </div>
     </div>
@@ -18,7 +18,7 @@
         <v-btn v-bind="attrs" v-on="on" absolute style="right: 10px;top: 10px;">Select Type</v-btn>
       </template>
       <v-list>
-        <v-list-item link v-for="(type, key) in graph_types" :key="key" @click="map_content = key">
+        <v-list-item link v-for="(type, key) in graph_data" :key="key" @click="map_content = key">
           <v-list-item-title>{{ type.title }}</v-list-item-title>
         </v-list-item>
       </v-list>
@@ -42,32 +42,33 @@ export default {
     // The logo should be removed due to floating above the navigation drawer
     this.removeLogo();
   },
-  props: ["data", "graph_types"],
+  props: ["data"],
   methods: {
     getCountrys: function(type) {
       let result = [];
       let data = [];
-      let middle = 0;
       const min_radius = 0.1;
       const geos = require("geos-major");
       for (let key in this.data) {
         data.push(this.data[key][type]);
       }
       data.sort((x, y) => (x - y));
-      middle = data[Math.floor(data.length / 2)] ? data[Math.floor(data.length / 2)] : 1;
-      const enlarge = 20 / (Math.log(data[data.length - 1] / middle) - Math.log(data.filter((item) => (item))[0] / middle));
+      const resize = this.graph_data[type].max_radius / Math.pow(2, (this.computeLog(data[data.length - 1])));
       for (let key in this.data) {
         const radius_data = this.data[key][type];
         try {
           result.push({
             location: [geos.country(key).longitude, geos.country(key).latitude],
-            radius: radius_data ? (Math.log(this.data[key][type] / middle) - Math.log(data.filter((item) => (item))[0] / middle)) * enlarge : min_radius
+            radius: radius_data ? (Math.pow(2, (this.computeLog(radius_data))) * resize) : min_radius
           });
         } catch {
           console.log("Oops, " + key + " is not found in the datasets!");
         }
       }
       return result;
+    },
+    computeLog: function(number) {
+      return Math.log(number) / Math.log(10)
     },
     removeLogo: function() {
       new Promise(resolve => setTimeout(resolve, 100)).then(() => {
@@ -87,7 +88,30 @@ export default {
     return {
       style: null,
       logo_removed: false,
-      map_content: "cases"
+      map_content: "cases",
+
+      graph_data: {
+        cases: {
+          title: "Cases",
+          color: "#3F51B5",
+          max_radius: 40
+        },
+        cumulative_cases: {
+          title: "Cumulative Cases",
+          color: "#5E35B1",
+          max_radius: 60
+        },
+        deaths: {
+          title: "Deaths",
+          color: "#FF7043",
+          max_radius: 35
+        },
+        cumulative_deaths: {
+          title: "Cumulative Deaths",
+          color: "#E53935",
+          max_radius: 50
+        }
+      }
     };
   }
 };

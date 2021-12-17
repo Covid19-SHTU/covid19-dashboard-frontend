@@ -36,6 +36,24 @@ export default {
   data() {
     return {
       tab: null,
+      graph_data: {
+        cases: {
+          title: "Cases",
+          color: "#3F51B5"
+        },
+        cumulative_cases: {
+          title: "Cumulative Cases",
+          color: "#5E35B1"
+        },
+        deaths: {
+          title: "Deaths",
+          color: "#FF7043"
+        },
+        cumulative_deaths: {
+          title: "Cumulative Deaths",
+          color: "#E53935"
+        }
+      },
       options: {
         responsive: true,
         scales: {
@@ -71,18 +89,17 @@ export default {
             },
           },
         },
-      },
+      }
     };
   },
-  props: ["data", "graph_types"],
+  props: ["data"],
   methods: {
     getData: function (type) {
-      console.log(type)
       let arr = {
         datasets: [
           {
-            label: this.graph_types[type].title,
-            backgroundColor: this.graph_types[type].color,
+            label: this.graph_data[type].title,
+            backgroundColor: this.graph_data[type].color,
             data: [],
           },
         ],
