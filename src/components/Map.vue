@@ -89,7 +89,6 @@ export default {
       style: null,
       logo_removed: false,
       map_content: "cases",
-
       graph_data: {
         cases: {
           title: "Cases",

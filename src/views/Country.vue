@@ -9,13 +9,17 @@
       </v-row>
       <v-row v-else key="view">
         <v-col cols="12">
-          <v-card>
-            <v-card-title class="font-weight-bold">
-              {{ data.country }}
-              <v-spacer></v-spacer>
-              <v-chip>{{ data.ISO }}</v-chip>
-            </v-card-title>
-          </v-card>
+          <v-autocomplete
+            v-model="country"
+            :items="data.country_list"
+            item-text="name"
+            item-value="ISO"
+            label="Choose a country to see its data"
+            hide-no-data
+            hide-details
+            solo
+            rounded
+          ></v-autocomplete>
         </v-col>
         <v-col cols="12" md="8">
           <v-row>
@@ -98,7 +102,7 @@ export default {
     return {
       data: null,
       loading: true,
-      search: "",
+      country: null,
       graph_data: {
         cases: {
           title: "Cases",
@@ -119,11 +123,17 @@ export default {
       }
     };
   },
+  watch: {
+    country: function() {
+      if (this.country != this.$route.params.id) {
+        this.$router.push({ path: `/country/${this.country}` });
+        this.fetchData();
+      }
+    }
+  },
   mounted() {
-    this.axios
-      .get(config.server_url + "/country/" + this.$route.params.id)
-      .then(response => (this.data = response.data))
-      .catch(() => (this.loading = false));
+    this.country = this.$route.params.id;
+    this.fetchData();
   },
   methods: {
     getDataOfDays: function(type, days) {
@@ -140,6 +150,13 @@ export default {
         ratio: ratio.toFixed(2) + "%",
         icon: ratio > 1 ? mdiMenuUp : mdiMenuDown
       };
+    },
+    fetchData() {
+      this.data = null
+      this.axios
+        .get(config.server_url + "/country/" + this.$route.params.id)
+        .then(response => (this.data = response.data))
+        .catch(() => (this.loading = false));
     }
   }
 };
