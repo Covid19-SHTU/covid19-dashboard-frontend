@@ -4,7 +4,18 @@ const productionGzipExtensions = /\.(js|css|json|md|html|ico)(\?.*)?$/i;
 module.exports = {
   productionSourceMap: false,
   chainWebpack: config => {
-    config.plugins.delete('prefetch')
+    config.plugins.delete('prefetch');
+    if (process.env.NODE_ENV === 'production') {
+      config.plugin('compressionPlugin')
+      .use(new CompressionWebpackPlugin({
+        filename: '[path][base].br',
+        algorithm: 'brotliCompress',
+        test: productionGzipExtensions,
+        compressionOptions: {
+          level: 11
+        }
+      }))
+    }
   },
   devServer: {
     hot: true,
@@ -16,16 +27,6 @@ module.exports = {
     "vuetify"
   ],
   configureWebpack: {
-    plugins: [
-      new CompressionWebpackPlugin({
-        filename: '[path][base].br',
-        algorithm: 'brotliCompress',
-        test: productionGzipExtensions,
-        compressionOptions: {
-          level: 11
-        }
-      })
-    ],
     externals: {
       'config': JSON.stringify({
         server_url: "http://10.19.75.251:6500"

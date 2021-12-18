@@ -20,56 +20,47 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="4">
-          <v-card>
-            <v-card-title>Global Statistics</v-card-title>
-            <v-card-text>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <p class="text-caption font-weight-bold">New Cases</p>
-                  <p class="text-h5 font-weight-bold">{{ data.world.cases }}</p>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <p class="text-caption font-weight-bold">Confirmed Cases</p>
-                  <p class="text-h5 font-weight-bold">{{ data.world.cumulative_cases }}</p>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <p class="text-caption font-weight-bold">New Deaths</p>
-                  <p class="text-h5 font-weight-bold">{{ data.world.deaths }}</p>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <p class="text-caption font-weight-bold">Confirmed Deaths</p>
-                  <p class="text-h5 font-weight-bold">{{ data.world.cumulative_deaths }}</p>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <p class="text-caption font-weight-bold">Vaccine Doses Administered</p>
-                  <p class="text-h5 font-weight-bold">{{ data.world.total_vaccinated }}</p>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <p class="text-caption font-weight-bold">Vaccinated At Least One Dose</p>
-                  <p class="text-h5 font-weight-bold">{{ data.world.plus_vaccinated }}</p>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <p class="text-caption font-weight-bold">Fully Vaccinated</p>
-                  <p class="text-h5 font-weight-bold">{{ data.world.fully_vaccinated }}</p>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <p class="text-caption font-weight-bold">Last Update</p>
-                  <p class="text-h5 font-weight-bold">{{ getTimeFromTimestamp(data.world.update) }}</p>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
+          <v-row>
+            <v-col cols="12">
+              <v-card>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-title>Show prediction</v-list-item-title>
+                    <v-list-item-avatar>
+                      <v-switch
+                        v-model="enable_prediction"
+                        hide-details
+                        class="mt-0"
+                        :loading="loading_prediction"
+                      ></v-switch>
+                    </v-list-item-avatar>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-col>
+            <v-col cols="12">
+              <v-card>
+                <v-card-title>Global Statistics</v-card-title>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="6" v-for="(item, key) in statistics_data" :key="key">
+                      <p class="text-caption font-weight-bold">{{ item }}</p>
+                      <div class="text-h5 font-weight-bold">{{ key == "last_update" ? getTimeFromTimestamp(data.world.update) : data.world[key] }}</div>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-col>
         <v-col cols="12" md="8">
           <v-card>
             <v-card-text>
-              <Chart :data="data.world.history" />
+              <Chart
+                :origin_data="data.world.history"
+                :enable_prediction.sync="enable_prediction"
+                :loading_prediction.sync="loading_prediction"
+              />
             </v-card-text>
           </v-card>
         </v-col>
@@ -120,6 +111,8 @@ export default {
       data: null,
       loading: true,
       search: "",
+      enable_prediction: false,
+      loading_prediction: false,
       table_headers: [
         { text: "Country", value: "country" },
         { text: "ISO", value: "ISO" },
@@ -130,7 +123,17 @@ export default {
         { text: "Vaccine Doses Administered", value: "total_vaccinated" },
         { text: "Vaccinated At Least One Dose", value: "plus_vaccinated" },
         { text: "Fully Vaccinated", value: "fully_vaccinated" }
-      ]
+      ],
+      statistics_data: {
+        cases: "New Cases",
+        cumulative_cases: "New Cases",
+        deaths: "New Cases",
+        cumulative_deaths: "New Cases",
+        total_vaccinated: "Vaccine Doses Administered",
+        plus_vaccinated: "Vaccinated At Least One Dose",
+        fully_vaccinated: "Fully Vaccinated",
+        last_update: "Last Update"
+      }
     };
   },
   mounted() {
@@ -151,8 +154,7 @@ export default {
       return arr;
     },
     getTimeFromTimestamp: function(time) {
-      let date = new Date();
-      date.setTime(time * 1000);
+      let date = new Date(time * 1000);
       return date.toLocaleDateString();
     }
   }

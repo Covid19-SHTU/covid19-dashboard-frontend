@@ -27,7 +27,7 @@
               <v-card :color="item.color" dark>
                 <v-card-text>
                   <v-row no-gutters class="white--text">
-                    <v-col cols="12" md="6">
+                    <v-col cols="6">
                       <div class="text-button">{{ item.title }}</div>
                       <p class="text-h4 font-weight-bold">{{ getDataOfDays(key, 1).value }}</p>
                       <div class="text-caption font-weight-bold">
@@ -35,13 +35,14 @@
                         {{ getDataOfDays(key, 1).ratio }}
                       </div>
                     </v-col>
-                    <v-col cols="12" md="6" align-self="center" class="text-right">
+                    <v-col cols="6" align-self="center" class="text-right">
                       <div class="text-caption font-weight-bold">7 days:</div>
                       <div class="text-h6 font-weight-bold">{{ getDataOfDays(key, 7).value }}</div>
                       <div class="text-caption">
                         <v-icon dense>{{ getDataOfDays(key, 7).icon }}</v-icon>
                         {{ getDataOfDays(key, 7).ratio }}
                       </div>
+                      <div v-if="enable_prediction" class="text-caption font-weight-bold">(With prediction)</div>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -50,34 +51,57 @@
           </v-row>
         </v-col>
         <v-col cols="12" md="4">
-          <v-card>
-            <v-card-title class="pb-0">Vaccination Data</v-card-title>
-            <v-list two-line>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-subtitle>Vaccine Doses Administered</v-list-item-subtitle>
-                  <v-list-item-title class="text-h5 font-weight-bold">{{ data.total_vaccinated }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-subtitle>Vaccinated At Least One Dose</v-list-item-subtitle>
-                  <v-list-item-title class="text-h5 font-weight-bold">{{ data.plus_vaccinated }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-subtitle>Fully Vaccinated</v-list-item-subtitle>
-                  <v-list-item-title class="text-h5 font-weight-bold">{{ data.fully_vaccinated }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-card>
+          <v-row>
+            <v-col cols="12">
+              <v-card>
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-title>Show prediction</v-list-item-title>
+                    <v-list-item-avatar>
+                      <v-switch
+                        v-model="enable_prediction"
+                        hide-details
+                        class="mt-0"
+                        :loading="loading_prediction"
+                      ></v-switch>
+                    </v-list-item-avatar>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-col>
+            <v-col cols="12">
+              <v-card>
+                <v-card-title class="pb-0">Vaccination Data</v-card-title>
+                <v-list two-line>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>Vaccine Doses Administered</v-list-item-subtitle>
+                      <v-list-item-title class="text-h5 font-weight-bold">{{ data.total_vaccinated }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>Vaccinated At Least One Dose</v-list-item-subtitle>
+                      <v-list-item-title class="text-h5 font-weight-bold">{{ data.plus_vaccinated }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>Fully Vaccinated</v-list-item-subtitle>
+                      <v-list-item-title
+                        class="text-h5 font-weight-bold"
+                      >{{ data.fully_vaccinated }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-col>
         <v-col cols="12">
           <v-card>
             <v-card-text>
-              <Chart :data="data.history" />
+              <Chart :origin_data="data.history" :enable_prediction.sync="enable_prediction" :loading_prediction.sync="loading_prediction" />
             </v-card-text>
           </v-card>
         </v-col>
@@ -103,6 +127,8 @@ export default {
       data: null,
       loading: true,
       country: null,
+      loading_prediction: false,
+      enable_prediction: false,
       graph_data: {
         cases: {
           title: "Cases",
@@ -121,11 +147,12 @@ export default {
           color: "#E53935"
         }
       }
-    };
+    }
   },
   watch: {
     country: function() {
       if (this.country != this.$route.params.id) {
+        this.enable_prediction = false
         this.$router.push({ path: `/country/${this.country}` });
         this.fetchData();
       }
@@ -152,7 +179,7 @@ export default {
       };
     },
     fetchData() {
-      this.data = null
+      this.data = null;
       this.axios
         .get(config.server_url + "/country/" + this.$route.params.id)
         .then(response => (this.data = response.data))

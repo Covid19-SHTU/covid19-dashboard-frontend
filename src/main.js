@@ -4,9 +4,11 @@ import vuetify from './plugins/vuetify'
 import router from './router'
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import VueCompositionAPI from "@vue/composition-api";
 import AmapVueConfig from '@amap/amap-vue/lib/config'
 
-Vue.use(VueAxios, axios); 
+Vue.use(VueAxios, axios);
+Vue.use(VueCompositionAPI);
 Vue.config.productionTip = false
 AmapVueConfig.key = 'ed5ff946c6eaa36a327380c3b57deff2'
 

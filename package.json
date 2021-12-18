@@ -9,19 +9,19 @@
   },
   "dependencies": {
     "@amap/amap-vue": "^2.0.13",
-    "@vue/composition-api": "^1.2.1",
-    "axios": "^0.21.4",
-    "chart.js": "^3.5.1",
+    "@vue/composition-api": "^1.4.2",
+    "axios": "^0.24.0",
+    "chart.js": "^3.6.2",
     "chartjs-adapter-moment": "^1.0.0",
-    "chartjs-plugin-zoom": "^1.1.1",
+    "chartjs-plugin-zoom": "^1.2.0",
     "core-js": "^3.6.5",
     "geos-major": "^1.2.1",
     "moment": "^2.29.1",
     "vue": "^2.6.11",
     "vue-axios": "^3.3.7",
-    "vue-chart-3": "^0.5.8",
+    "vue-chart-3": "^2.0.3",
     "vue-router": "^3.2.0",
-    "vuetify": "^2.4.0"
+    "vuetify": "^2.6.1"
   },
   "devDependencies": {
     "@mdi/js": "^6.1.95",

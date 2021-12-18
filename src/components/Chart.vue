@@ -1,22 +1,10 @@
 <template>
   <v-tabs v-model="tab" centered show-arrows>
     <v-tabs-slider></v-tabs-slider>
-    <v-tab href="#tab-1">Cases</v-tab>
-    <v-tab href="#tab-2">Cumulative Cases</v-tab>
-    <v-tab href="#tab-3">Deaths</v-tab>
-    <v-tab href="#tab-4">Cumulative Deaths</v-tab>
-    <v-tabs-items v-model="tab" touchless>
-      <v-tab-item value="tab-1">
-        <bar-chart :chartData="getData('cases')" :options="options" />
-      </v-tab-item>
-      <v-tab-item value="tab-2">
-        <bar-chart :chartData="getData('cumulative_cases')" :options="options" />
-      </v-tab-item>
-      <v-tab-item value="tab-3">
-        <bar-chart :chartData="getData('deaths')" :options="options" />
-      </v-tab-item>
-      <v-tab-item value="tab-4">
-        <bar-chart :chartData="getData('cumulative_deaths')" :options="options" />
+    <v-tab :href="`#${key}`" v-for="(item, key) in graph_data" :key="key">{{ item.title }}</v-tab>
+    <v-tabs-items v-model="tab">
+      <v-tab-item :value="key" touchless v-for="(item, key) in graph_data" :key="key">
+        <bar-chart :chartData="chartData(key)" :options="options" :ref="`chart-${key}`" />
       </v-tab-item>
     </v-tabs-items>
   </v-tabs>
@@ -27,15 +15,18 @@ import { BarChart } from "vue-chart-3";
 import Chart from "chart.js/auto";
 import zoomPlugin from "chartjs-plugin-zoom";
 import "chartjs-adapter-moment";
+import config from "config";
 Chart.register(zoomPlugin);
 
 export default {
   components: {
-    BarChart,
+    BarChart
   },
   data() {
     return {
       tab: null,
+      data: this.origin_data,
+      prediction: [],
       graph_data: {
         cases: {
           title: "Cases",
@@ -57,67 +48,110 @@ export default {
       options: {
         responsive: true,
         scales: {
-          xAxes: [
-            {
-              type: "time",
-              time: {
-                tooltipFormat: "LL",
-              },
-            },
-          ],
+          x: {
+            type: "time",
+            time: {
+              tooltipFormat: "LL"
+            }
+          }
         },
         plugins: {
           legend: false,
           decimation: {
             enabled: true,
-            algorithm: "min-max",
+            algorithm: "min-max"
           },
           zoom: {
+            limits: {
+              x: {
+                min: "original",
+                max: "original",
+                minRange: 86400 * 30 * 1000
+              }
+            },
             pan: {
               enabled: true,
-              mode: "x",
+              mode: "x"
             },
             zoom: {
               wheel: {
                 enabled: true,
-                speed: 0.2,
+                speed: 0.2
               },
               pinch: {
-                enabled: true,
+                enabled: true
               },
-              mode: "x",
-            },
-          },
-        },
+              mode: "x"
+            }
+          }
+        }
       }
     };
   },
-  props: ["data"],
+  props: ["origin_data", "enable_prediction", "loading_prediction"],
+  computed: {
+    chartData() {
+      return function(type) {
+        return this.getData(this.data, type);
+      };
+    }
+  },
+  watch: {
+    enable_prediction() {
+      this.enable_prediction ? this.addPrediction() : this.removePrediction();
+    },
+    tab() {
+      this.$emit("update:enable_prediction", false) 
+    }
+  },
   methods: {
-    getData: function (type) {
+    getData: function(input, type) {
       let arr = {
         datasets: [
           {
             label: this.graph_data[type].title,
             backgroundColor: this.graph_data[type].color,
-            data: [],
-          },
-        ],
+            data: []
+          }
+        ]
       };
-      for (let key in this.data) {
-        let data = this.data[key];
+      for (let key in input) {
+        let data = input[key];
         arr.datasets[0].data.push({
           x: this.getTimeFromTimestamp(data.time),
-          y: data[type],
+          y: data[type]
         });
       }
       return arr;
     },
-    getTimeFromTimestamp: function (time) {
-      let date = new Date();
-      date.setTime(time * 1000);
-      return date.toLocaleDateString();
+    addPrediction: function() {
+      const country = this.$route.params.id == undefined ? "ALL" : this.$route.params.id;
+      this.$emit("update:loading_prediction", "primary") 
+      const min = this.getTimeFromTimestamp([...this.data].slice(-21)[0].time);
+      const max = this.getTimeFromTimestamp([...this.data].pop().time + 86400 * 7);
+      this.options.plugins.zoom.limits.x.max = max;
+      this.axios
+        .get(config.server_url + "/predict/" + country)
+        .then(response => {
+          this.prediction = response.data;
+          this.$emit("update:loading_prediction", false) ;
+          this.data.push(...this.prediction);
+          this.$refs["chart-" + this.tab][0].chartInstance.zoomScale("x", {min: min, max: max}, "default");
+        })
+        .catch(() => console.log("Oops, something goes wrong!"));
     },
-  },
+    removePrediction: function() {
+      this.data.splice(
+        this.data.length - this.prediction.length,
+        this.data.length
+      );
+      const max = this.getTimeFromTimestamp([...this.data].pop().time)
+      this.options.plugins.zoom.limits.x.max = max;
+    },
+    getTimeFromTimestamp: function(time) {
+      let date = new Date(time * 1000);
+      return date;
+    }
+  }
 };
 </script>
