@@ -9,14 +9,16 @@
           <v-skeleton-loader type="date-picker"></v-skeleton-loader>
         </v-col>
         <v-col cols="12" md="8">
-          <v-skeleton-loader type="card"></v-skeleton-loader>
-          <v-skeleton-loader type="table" class="mt-4"></v-skeleton-loader>
+          <v-skeleton-loader type="list-item-avatar-three-line, image, article"></v-skeleton-loader>
+        </v-col>
+        <v-col cols="12">
+          <v-skeleton-loader type="table"></v-skeleton-loader>
         </v-col>
       </v-row>
       <v-row v-else key="view">
         <v-col cols="12">
           <v-card height="500">
-            <Map :data="data.country" />
+            <Map :data="data.country" :theme="theme" />
           </v-card>
         </v-col>
         <v-col cols="12" md="4">
@@ -30,6 +32,7 @@
                       <v-switch
                         v-model="enable_prediction"
                         hide-details
+                        :disabled="loading_prediction"
                         class="mt-0"
                         :loading="loading_prediction"
                       ></v-switch>
@@ -96,7 +99,7 @@
 
 <script>
 import Overlay from "../components/Overlay.vue";
-import Chart from "../components/Chart.vue";
+import Chart from "../components/charts/BarChart.vue";
 import Map from "../components/Map.vue";
 import config from "config";
 
@@ -126,9 +129,9 @@ export default {
       ],
       statistics_data: {
         cases: "New Cases",
-        cumulative_cases: "New Cases",
-        deaths: "New Cases",
-        cumulative_deaths: "New Cases",
+        cumulative_cases: "Cumulative Cases",
+        deaths: "New Deaths",
+        cumulative_deaths: "Cumulative Deaths",
         total_vaccinated: "Vaccine Doses Administered",
         plus_vaccinated: "Vaccinated At Least One Dose",
         fully_vaccinated: "Fully Vaccinated",
@@ -136,6 +139,7 @@ export default {
       }
     };
   },
+  props: ["theme"],
   mounted() {
     this.axios
       .get(config.server_url)

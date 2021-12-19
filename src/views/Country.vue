@@ -62,6 +62,7 @@
                         v-model="enable_prediction"
                         hide-details
                         class="mt-0"
+                        :disabled="Boolean(loading_prediction)"
                         :loading="loading_prediction"
                       ></v-switch>
                     </v-list-item-avatar>
@@ -88,9 +89,7 @@
                   <v-list-item>
                     <v-list-item-content>
                       <v-list-item-subtitle>Fully Vaccinated</v-list-item-subtitle>
-                      <v-list-item-title
-                        class="text-h5 font-weight-bold"
-                      >{{ data.fully_vaccinated }}</v-list-item-title>
+                      <v-list-item-title class="text-h5 font-weight-bold">{{ data.fully_vaccinated }}</v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list>
@@ -98,10 +97,26 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" md="3">
+          <v-card>
+            <v-card-title class="pb-0">
+              Measures
+              <v-spacer></v-spacer>
+              <v-chip :color="measure_chip.color">{{ measure_chip.text }}</v-chip>
+            </v-card-title>
+            <v-card-text>
+              <RadarChart :origin_data="data.phsm_data" />
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="12" md="9">
           <v-card>
             <v-card-text>
-              <Chart :origin_data="data.history" :enable_prediction.sync="enable_prediction" :loading_prediction.sync="loading_prediction" />
+              <BarChart
+                :origin_data="data.history"
+                :enable_prediction.sync="enable_prediction"
+                :loading_prediction.sync="loading_prediction"
+              />
             </v-card-text>
           </v-card>
         </v-col>
@@ -113,14 +128,16 @@
 
 <script>
 import Overlay from "../components/Overlay.vue";
-import Chart from "../components/Chart.vue";
+import BarChart from "../components/charts/BarChart.vue";
+import RadarChart from "../components/charts/RadarChart.vue";
 import config from "config";
 import { mdiMenuUp, mdiMenuDown } from "@mdi/js";
 
 export default {
   components: {
     Overlay,
-    Chart
+    BarChart,
+    RadarChart
   },
   data() {
     return {
@@ -146,6 +163,20 @@ export default {
           title: "Cumulative Deaths",
           color: "#E53935"
         }
+      }
+    }
+  },
+  props: ["theme"],
+  computed: {
+    measure_chip() {
+      if (this.data.phsm_ratio <= 35) {
+        return {color: "green", text: "Loose"}
+      }
+      else if (this.data.phsm_ratio > 35 && this.data.phsm_ratio <= 60) {
+        return {color: "primary", text: "Normal"}
+      }
+      else {
+        return {color: "red", text: "Tense"}
       }
     }
   },

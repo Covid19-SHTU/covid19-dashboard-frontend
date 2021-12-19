@@ -7,7 +7,7 @@
           :key="dekey"
           :center="country.location"
           :radius="country.radius"
-          :fillOpacity="0.2"
+          :fillOpacity="0.5"
           :strokeWeight="0"
           :fillColor="graph_data[key].color"
         />
@@ -36,13 +36,16 @@ export default {
     AmapCircleMarker
   },
   created() {
-    this.style = this.$vuetify.theme.dark
-      ? "amap://styles/dark"
-      : "amap://styles/whitesmoke";
+    this.style = this.theme ? "amap://styles/dark" : "amap://styles/whitesmoke";
     // The logo should be removed due to floating above the navigation drawer
     this.removeLogo();
   },
-  props: ["data"],
+  watch: {
+    theme() {
+      this.style = this.theme ? "amap://styles/dark" : "amap://styles/whitesmoke";
+    }
+  },
+  props: ["data", "theme"],
   methods: {
     getCountrys: function(type) {
       let result = [];
@@ -109,7 +112,22 @@ export default {
           title: "Cumulative Deaths",
           color: "#E53935",
           max_radius: 50
-        }
+        },
+        total_vaccinated: {
+          title: "Total Vaccinated",
+          color: "#2E7D32",
+          max_radius: 60
+        },
+        plus_vaccinated: {
+          title: "At Least One Vaccinated",
+          color: "#00897B",
+          max_radius: 50
+        },
+        fully_vaccinated: {
+          title: "Fully Vaccinated",
+          color: "#8BC34A",
+          max_radius: 45
+        },
       }
     };
   }

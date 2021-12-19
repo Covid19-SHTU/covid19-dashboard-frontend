@@ -7,14 +7,14 @@ module.exports = {
     config.plugins.delete('prefetch');
     if (process.env.NODE_ENV === 'production') {
       config.plugin('compressionPlugin')
-      .use(new CompressionWebpackPlugin({
-        filename: '[path][base].br',
-        algorithm: 'brotliCompress',
-        test: productionGzipExtensions,
-        compressionOptions: {
-          level: 11
-        }
-      }))
+        .use(new CompressionWebpackPlugin({
+          filename: '[path][base].br',
+          algorithm: 'brotliCompress',
+          test: productionGzipExtensions,
+          compressionOptions: {
+            level: 11
+          }
+        }))
     }
   },
   devServer: {
@@ -29,7 +29,7 @@ module.exports = {
   configureWebpack: {
     externals: {
       'config': JSON.stringify({
-        server_url: "http://10.19.75.251:6500"
+        server_url: "http://10.19.75.251:8500"
       })
     }
   }

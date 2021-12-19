@@ -46,7 +46,7 @@
       </v-dialog>
     </v-app-bar>
     <v-main>
-      <router-view />
+      <router-view :theme="$vuetify.theme.dark" />
     </v-main>
   </v-app>
 </template>
