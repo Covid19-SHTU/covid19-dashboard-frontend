@@ -24,7 +24,7 @@
         <v-col cols="12" md="8">
           <v-row>
             <v-col cols="12" md="6" v-for="(item, key) in graph_data" :key="key">
-              <v-card :color="item.color" dark>
+              <v-card :color="item.color" dark class="py-md-3">
                 <v-card-text>
                   <v-row no-gutters class="white--text">
                     <v-col cols="6">
@@ -102,7 +102,7 @@
             <v-card-title class="pb-0">
               Measures
               <v-spacer></v-spacer>
-              <v-chip :color="measure_chip.color">{{ measure_chip.text }}</v-chip>
+              <v-chip :color="measure_chip.color" text-color="white">{{ measure_chip.text }}</v-chip>
             </v-card-title>
             <v-card-text>
               <RadarChart :origin_data="data.phsm_data" />
@@ -173,7 +173,7 @@ export default {
         return {color: "green", text: "Loose"}
       }
       else if (this.data.phsm_ratio > 35 && this.data.phsm_ratio <= 60) {
-        return {color: "primary", text: "Normal"}
+        return {color: "primary", text: "Middle"}
       }
       else {
         return {color: "red", text: "Tense"}

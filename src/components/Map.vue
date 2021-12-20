@@ -50,7 +50,7 @@ export default {
     getCountrys: function(type) {
       let result = [];
       let data = [];
-      const min_radius = 0.1;
+      const min_radius = 0;
       const geos = require("geos-major");
       for (let key in this.data) {
         data.push(this.data[key][type]);

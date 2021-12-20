@@ -45,10 +45,6 @@ export default {
         arr.datasets[0].data.push(data);
       }
       return arr;
-    },
-    getTimeFromTimestamp: function(time) {
-      let date = new Date(time * 1000);
-      return date;
     }
   }
 };

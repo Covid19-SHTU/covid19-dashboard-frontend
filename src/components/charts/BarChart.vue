@@ -1,9 +1,8 @@
 <template>
   <v-tabs v-model="tab" centered show-arrows>
-    <v-tabs-slider></v-tabs-slider>
     <v-tab :href="`#${key}`" v-for="(item, key) in graph_data" :key="key">{{ item.title }}</v-tab>
-    <v-tabs-items v-model="tab">
-      <v-tab-item :value="key" touchless v-for="(item, key) in graph_data" :key="key">
+    <v-tabs-items v-model="tab" touchless>
+      <v-tab-item :value="key" v-for="(item, key) in graph_data" :key="key">
         <bar-chart :chartData="chartData(key)" :options="options" :ref="`chart-${key}`" />
       </v-tab-item>
     </v-tabs-items>
